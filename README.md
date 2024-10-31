@@ -14,7 +14,7 @@ Masukkan ``localStorage.getItem('np_token');`` di konsol
 
 ## 2. Instal komponen
 ``` pesta
-instalasi pip -r requirements.txt
+instalasi pip install -r requirements.txt
 ```
 
 ## 3. Jalankan
