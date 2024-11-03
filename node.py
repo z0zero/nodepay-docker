@@ -2,21 +2,21 @@ import asyncio
 import aiohttp
 import time
 import uuid
-import cloudscraper 
+import cloudscraper  
 from loguru import logger
 
 
 def show_copyright():
     copyright_info = """
-    *****************************************************
-    *            WELCOME                                *
+     *****************************************************
+    *                   WELCOME!!!!                     *
     *           Tg:https://t.me/Idwroff                 *
     *           Version 1.0                             *
     *           Copyright (c) 2024                      *
     *           All Rights Reserved                     *
-    *           Regards All Member IDWR！               *
-    *****************************************************
-    """
+    *       Memakai Script Berarti mengerti konsekuensi *
+    *                Regards All Admin IDWR             *
+    *****************************************************    """
     print(copyright_info)
 
     confirm = input("Press Enter to continue or Ctrl+C to exit... ")
@@ -31,7 +31,7 @@ def show_copyright():
 # Constants
 PING_INTERVAL = 60  
 RETRIES = 60  
-TOKEN_FILE = 'np_tokens.txt'  
+TOKEN_FILE = 'np_tokens_1.txt'  
 
 DOMAIN_API = {
     "SESSION": "https://api.nodepay.org/api/auth/session",
@@ -106,14 +106,14 @@ async def call_api(url, data, proxy, token):
     }
 
     try:
-        
+   
         scraper = cloudscraper.create_scraper()
 
         
         response = scraper.post(url, json=data, headers=headers, proxies={
                                 "http": proxy, "https": proxy}, timeout=10)
 
-        
+         
         response.raise_for_status()
         return valid_resp(response.json())
     except Exception as e:
@@ -139,17 +139,16 @@ async def ping(proxy, token):
 
     
     if proxy in last_ping_time and (current_time - last_ping_time[proxy]) < PING_INTERVAL:
-        logger.info(f"Skipping ping for proxy {
-                    proxy}, not enough time elapsed")
+        logger.info(f"Skipping ping for proxy { proxy}, not enough time elapsed")
         return
 
-    # 更新上次ping的时间
+    
     last_ping_time[proxy] = current_time
 
     try:
         data = {
             "id": account_info.get("uid"),
-            "browser_id": browser_id,  # 使用当前的 browser_id
+            "browser_id": browser_id,  
             "timestamp": int(time.time())
         }
 
@@ -197,29 +196,29 @@ def load_proxies(proxy_file):
 
 
 def save_status(proxy, status):
-    pass  # 这里可以添加保存状态的逻辑
+    pass  
 
 
 def save_session_info(proxy, data):
-    # 将 browser_id 也保存到会话信息中
+    
     data_to_save = {
         "uid": data.get("uid"),
-        "browser_id": browser_id  # 保存 browser_id
+        "browser_id": browser_id  
     }
-    # 这里可以添加保存逻辑，例如写入文件或数据库
+    
     pass
 
 
 def load_session_info(proxy):
-    return {}  # 这里可以加载会话信息
+    return {}  
 
 
 def is_valid_proxy(proxy):
-    return True  # 这里可以验证代理的有效性
+    return True  
 
 
 def remove_proxy_from_list(proxy):
-    pass  # 这里可以移除代理的逻辑
+    pass  
 
 
 def load_tokens_from_file(filename):
@@ -233,7 +232,7 @@ def load_tokens_from_file(filename):
 
 
 async def main():
-    all_proxies = load_proxies('proxy.txt')  
+    all_proxies = load_proxies('proxy_1.txt')  
     tokens = load_tokens_from_file(TOKEN_FILE)  
 
     while True:
@@ -247,8 +246,7 @@ async def main():
             for task in done:
                 failed_proxy = tasks[task]
                 if task.result() is None:
-                    logger.info(f"Removing and replacing failed proxy: {
-                                failed_proxy}")
+                    logger.info(f"Removing and replacing failed proxy: {failed_proxy}")
                     active_proxies.remove(failed_proxy)
                     if all_proxies:
                         new_proxy = all_proxies.pop(0)
@@ -264,7 +262,7 @@ async def main():
                     render_profile_info(proxy, token))
                 tasks[new_task] = proxy
 
-            # 防止快速失败导致的紧密循环
+           
             await asyncio.sleep(3)
         await asyncio.sleep(10)  
 
