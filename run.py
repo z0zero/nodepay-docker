@@ -2,23 +2,21 @@ import asyncio
 import aiohttp
 import time
 import uuid
-import cloudscraper  
+import cloudscraper
 from loguru import logger
+import random
 
 def show_warning():
-
     confirm = input("By using this tool means you understand the risks. do it at your own risk! Press Enter to continue or Ctrl+C to cancel... ")
-
     if confirm.strip() == "":
         print("Continuing...")
     else:
         print("Exiting...")
         exit()
 
-
 # Constants
-PING_INTERVAL = 60  
-RETRIES = 60  
+PING_INTERVAL = 60
+RETRIES = 60
 
 DOMAIN_API = {
     "SESSION": "https://api.nodepay.org/api/auth/session",
@@ -34,25 +32,32 @@ CONNECTION_STATES = {
 status_connect = CONNECTION_STATES["NONE_CONNECTION"]
 browser_id = None
 account_info = {}
-last_ping_time = {}  
+last_ping_time = {}
 
+# List of Chrome User-Agents
+CHROME_USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/91.0.864.67",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/92.0.902.55
+]
 
 def uuidv4():
     return str(uuid.uuid4())
-
 
 def valid_resp(resp):
     if not resp or "code" not in resp or resp["code"] < 0:
         raise ValueError("Invalid response")
     return resp
 
-
 async def render_profile_info(proxy, token):
     global browser_id, account_info
-
     try:
         np_session_info = load_session_info(proxy)
-
         if not np_session_info:
             # Generate new browser_id
             browser_id = uuidv4()
@@ -81,29 +86,25 @@ async def render_profile_info(proxy, token):
             logger.error(f"Connection error: {e}")
             return proxy
 
-
 async def call_api(url, data, proxy, token):
+    user_agent = random.choice(CHROME_USER_AGENTS)
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+        "User-Agent": user_agent,
         "Accept": "application/json",
         "Accept-Language": "en-US,en;q=0.5",
         "Referer": "https://app.nodepay.ai",
     }
-
     try:
         scraper = cloudscraper.create_scraper()
-
         response = scraper.post(url, json=data, headers=headers, proxies={
                                 "http": proxy, "https": proxy}, timeout=30)
-
         response.raise_for_status()
         return valid_resp(response.json())
     except Exception as e:
         logger.error(f"Error during API call: {e}")
         raise ValueError(f"Failed API call to {url}")
-
 
 async def start_ping(proxy, token):
     try:
