@@ -7,7 +7,7 @@ from loguru import logger
 import random
 
 def show_warning():
-    confirm = input("By using this tool means you understand the risks. do it at your own risk! Press Enter to continue or Ctrl+C to cancel... ")
+    confirm = input("By using this tool means you understand the risks. do it at your own risk! \nPress Enter to continue or Ctrl+C to cancel... ")
     if confirm.strip() == "":
         print("Continuing...")
     else:
