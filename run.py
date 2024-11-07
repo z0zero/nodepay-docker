@@ -19,7 +19,6 @@ def show_warning():
 # Constants
 PING_INTERVAL = 60  
 RETRIES = 60  
-TOKEN_FILE = 'np_tokens.txt'  
 
 DOMAIN_API = {
     "SESSION": "https://api.nodepay.org/api/auth/session",
@@ -94,14 +93,11 @@ async def call_api(url, data, proxy, token):
     }
 
     try:
-   
         scraper = cloudscraper.create_scraper()
 
-        
         response = scraper.post(url, json=data, headers=headers, proxies={
                                 "http": proxy, "https": proxy}, timeout=10)
 
-         
         response.raise_for_status()
         return valid_resp(response.json())
     except Exception as e:
@@ -125,12 +121,10 @@ async def ping(proxy, token):
 
     current_time = time.time()
 
-    
     if proxy in last_ping_time and (current_time - last_ping_time[proxy]) < PING_INTERVAL:
         logger.info(f"Skipping ping for proxy { proxy}, not enough time elapsed")
         return
 
-    
     last_ping_time[proxy] = current_time
 
     try:
@@ -209,50 +203,43 @@ def remove_proxy_from_list(proxy):
     pass  
 
 
-def load_tokens_from_file(filename):
-    try:
-        with open(filename, 'r') as file:
-            tokens = file.read().splitlines()
-        return tokens
-    except Exception as e:
-        logger.error(f"Failed to load tokens: {e}")
-        raise SystemExit("Exiting due to failure in loading tokens")
-
-
 async def main():
     all_proxies = load_proxies('proxies.txt')  
-    tokens = load_tokens_from_file(TOKEN_FILE)  
+
+    # Take token input directly from the user
+    token = input("Enter your Nodepay token: ").strip()
+    if not token:
+        print("Token cannot be empty. Exiting the program.")
+        exit()
 
     while True:
-        for token in tokens:
-            active_proxies = [
-                proxy for proxy in all_proxies if is_valid_proxy(proxy)][:100]
-            tasks = {asyncio.create_task(render_profile_info(
-                proxy, token)): proxy for proxy in active_proxies}
+        active_proxies = [
+            proxy for proxy in all_proxies if is_valid_proxy(proxy)][:100]
+        tasks = {asyncio.create_task(render_profile_info(
+            proxy, token)): proxy for proxy in active_proxies}
 
-            done, pending = await asyncio.wait(tasks.keys(), return_when=asyncio.FIRST_COMPLETED)
-            for task in done:
-                failed_proxy = tasks[task]
-                if task.result() is None:
-                    logger.info(f"Removing and replacing failed proxy: {failed_proxy}")
-                    active_proxies.remove(failed_proxy)
-                    if all_proxies:
-                        new_proxy = all_proxies.pop(0)
-                        if is_valid_proxy(new_proxy):
-                            active_proxies.append(new_proxy)
-                            new_task = asyncio.create_task(
-                                render_profile_info(new_proxy, token))
-                            tasks[new_task] = new_proxy
-                tasks.pop(task)
+        done, pending = await asyncio.wait(tasks.keys(), return_when=asyncio.FIRST_COMPLETED)
+        for task in done:
+            failed_proxy = tasks[task]
+            if task.result() is None:
+                logger.info(f"Removing and replacing failed proxy: {failed_proxy}")
+                active_proxies.remove(failed_proxy)
+                if all_proxies:
+                    new_proxy = all_proxies.pop(0)
+                    if is_valid_proxy(new_proxy):
+                        active_proxies.append(new_proxy)
+                        new_task = asyncio.create_task(
+                            render_profile_info(new_proxy, token))
+                        tasks[new_task] = new_proxy
+            tasks.pop(task)
 
-            for proxy in set(active_proxies) - set(tasks.values()):
-                new_task = asyncio.create_task(
-                    render_profile_info(proxy, token))
-                tasks[new_task] = proxy
+        for proxy in set(active_proxies) - set(tasks.values()):
+            new_task = asyncio.create_task(
+                render_profile_info(proxy, token))
+            tasks[new_task] = proxy
 
-           
-            await asyncio.sleep(3)
-        await asyncio.sleep(10)  
+        await asyncio.sleep(3)
+    await asyncio.sleep(10)  
 
 
 if __name__ == '__main__':
