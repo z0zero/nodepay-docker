@@ -7,7 +7,7 @@ from loguru import logger
 
 def show_warning():
 
-    confirm = input("By using this tool means you understand the risks. do it at your own risk! or Ctrl+C to cancel... ")
+    confirm = input("By using this tool means you understand the risks. do it at your own risk! Press Enter to continue or Ctrl+C to cancel... ")
 
     if confirm.strip() == "":
         print("Continuing with the program...")
@@ -207,7 +207,7 @@ async def main():
     all_proxies = load_proxies('proxies.txt')  
 
     # Take token input directly from the user
-    token = input("Enter your Nodepay token: ").strip()
+    token = input("Nodepay token: ").strip()
     if not token:
         print("Token cannot be empty. Exiting the program.")
         exit()
@@ -244,7 +244,7 @@ async def main():
 
 if __name__ == '__main__':
     show_warning()
-    print("Alright, we here!")
+    print("Alright, we here! Insert your nodepay token that you got from the tutorial.")
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
