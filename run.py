@@ -5,21 +5,9 @@ import uuid
 import cloudscraper  
 from loguru import logger
 
+def show_warning():
 
-def show_copyright():
-    copyright_info = """
-     *****************************************************
-    *                   WELCOME!!!!                     *
-    *           Tg:https://t.me/Idwroff                 *
-    *           Version 1.0                             *
-    *           Copyright (c) 2024                      *
-    *           All Rights Reserved                     *
-    *       Memakai Script Berarti mengerti konsekuensi *
-    *                Regards All Admin IDWR             *
-    *****************************************************    """
-    print(copyright_info)
-
-    confirm = input("Press Enter to continue or Ctrl+C to exit... ")
+    confirm = input("By using this tool means you understand the risks. do it at your own risk! or Ctrl+C to cancel... ")
 
     if confirm.strip() == "":
         print("Continuing with the program...")
@@ -31,7 +19,7 @@ def show_copyright():
 # Constants
 PING_INTERVAL = 60  
 RETRIES = 60  
-TOKEN_FILE = 'np_tokens_1.txt'  
+TOKEN_FILE = 'np_tokens.txt'  
 
 DOMAIN_API = {
     "SESSION": "https://api.nodepay.org/api/auth/session",
@@ -67,7 +55,7 @@ async def render_profile_info(proxy, token):
         np_session_info = load_session_info(proxy)
 
         if not np_session_info:
-            # 生成新的 browser_id
+            # Generate new browser_id
             browser_id = uuidv4()
             response = await call_api(DOMAIN_API["SESSION"], {}, proxy, token)
             valid_resp(response)
@@ -232,7 +220,7 @@ def load_tokens_from_file(filename):
 
 
 async def main():
-    all_proxies = load_proxies('proxy_1.txt')  
+    all_proxies = load_proxies('proxies.txt')  
     tokens = load_tokens_from_file(TOKEN_FILE)  
 
     while True:
@@ -268,8 +256,8 @@ async def main():
 
 
 if __name__ == '__main__':
-    show_copyright()
-    print("Welcome to the main program!")
+    show_warning()
+    print("Alright, we here!")
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
