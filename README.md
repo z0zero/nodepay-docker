@@ -11,7 +11,7 @@
 ![0001](https://github.com/im-hanzou/getgrass_bot/blob/main/pasting.JPG)
 - Then type ``localStorage.getItem('np_token')`` and press enter
 ![0002](https://github.com/im-hanzou/getgrass_bot/blob/main/nodepaytoken.png)
-- The text that appears is your nodepay token and copy the text appears
+- The text that appears is your nodepay token and copy the text
 ### Component installation
 - Install Python For Windows: [Python](https://www.python.org/ftp/python/3.13.0/python-3.13.0-amd64.exe)
 - For Unix:
