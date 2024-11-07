@@ -1,42 +1,38 @@
-#nodepayai
+# Nodepay Automate with Proxies
+- REGISTER: [https://app.nodepay.ai/register](https://app.nodepay.ai/register?ref=ZUCBuJaIoBXLE6J)
+- [FREE 10 PREMIUM PROXIES](https://www.webshare.io/?referral_code=p7k7whpdu2jg)
 
-
-nodepay.ai check-in 100% multi account 
-Daftar melalui RF saya: https://app.nodepay.ai/register?ref=lT9nSxglpEdeSjg
-# Fungsi
-Server dapat digunakan secara on-hook, sehingga tidak perlu beralih di antara beberapa alamat IP.
-
-FREE PROXY PREMIUM : https://www.webshare.io/?referral_code=opn47vm75z27
-
-# Langkah-langkah untuk menjalankan kode -
-## 1.Buka tautan dan masuk ``https://app.nodepay.ai/dashboard``
-Tekan F12 pada halaman untuk membuka konsol dan masukkan kode (Ctrl + Shift + i) untuk memeriksa
-Masukkan ``localStorage.getItem('np_token');`` di konsol
-"Teks yang dicetak adalah NP_TOKEN"
-
-
-
-## 2. Instal komponen
-``` pesta
-instalasi pip install -r requirements.txt
+# Installation
+- Open [Nodepay](https://app.nodepay.ai/register?ref=ZUCBuJaIoBXLE6J) and login to dashboard
+- Press F12 or CTRL + SHIFT + I
+- Select Console
+- At the console, type ```allow pasting``` and press enter
+![0001](https://github.com/im-hanzou/getgrass_bot/blob/main/pasting.JPG)
+- Then type ``localStorage.getItem('np_token')`` and press enter
+![0002](https://github.com/im-hanzou/getgrass_bot/blob/main/nodepaytoken.png)
+- The text that appears is your nodepay token and copy the text
+### Component installation
+- Install Python For Windows: [Python](https://www.python.org/ftp/python/3.13.0/python-3.13.0-amd64.exe)
+- For Unix:
+```bash
+apt install python3 python3-pip -y
 ```
-
-## 3. Jalankan
-``` pesta
-python3 node.py
+- Install requirements: 
+```bash
+python3 -m pip install -r requirements.txt
 ```
-
-
-
-
-# Status operasi
-Jika muncul log berikut, berarti sedang berjalan.
-``` pesta
-30-07-2024 04:37:18.263 |. INFO |. __main__:ping:110 - Ping berhasil: {'sukses': Benar, 'kode': 0, 'pesan': 'Sukses', 'data': {'ip_score ': 88}}
-30-07-2024 04:37:48.621 |. INFO |. __main__:ping:110 - Ping berhasil: {'sukses': Benar, 'kode': 0, 'pesan': 'Sukses', 'data': {'ip_score ': 90}}
-30-07-2024 04:38:18.968 |. INFO |. __main__:ping:110 - Ping berhasil: {'sukses': Benar, 'kode': 0, 'pesan': 'Sukses', 'data': {'ip_score ': 94}}
-30-07-2024 04:38:59.338 |. INFO |. __main__:ping:110 - Ping berhasil: {'sukses': Benar, 'kode': 0, 'pesan': 'Sukses', 'data': {'ip_score ': 98}}
+### Run the Bot
+- Run:
+```bash
+python3 run.py
 ```
-
-CATATAN :  JIka MERAH TUNGGU SAMPAI CONNECT BERWARNA BIRU ARTINYA SUDAH KONEK!!
-PERTANYAAN BISA DI CONTACT CHANNEL TELE : https://t.me/Idwroff
+- Then insert your nodepay token
+![0003]
+# Operating status
+If the following log appears, it means it is running.
+```bash
+2024-07-30 04:37:18.263 | INFO     | __main__:ping:110 - Ping successful: {'success': True, 'code': 0, 'msg': 'Success', 'data': {'ip_score': 88}}
+2024-07-30 04:37:48.621 | INFO     | __main__:ping:110 - Ping successful: {'success': True, 'code': 0, 'msg': 'Success', 'data': {'ip_score': 90}}
+2024-07-30 04:38:18.968 | INFO     | __main__:ping:110 - Ping successful: {'success': True, 'code': 0, 'msg': 'Success', 'data': {'ip_score': 94}}
+2024-07-30 04:38:59.338 | INFO     | __main__:ping:110 - Ping successful: {'success': True, 'code': 0, 'msg': 'Success', 'data': {'ip_score': 98}}
+```
