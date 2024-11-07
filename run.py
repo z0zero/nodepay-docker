@@ -34,7 +34,6 @@ browser_id = None
 account_info = {}
 last_ping_time = {}
 
-# List of Chrome User-Agents
 CHROME_USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -158,7 +157,6 @@ def handle_ping_fail(proxy, response):
     else:
         status_connect = CONNECTION_STATES["DISCONNECTED"]
 
-
 def handle_logout(proxy):
     global status_connect, account_info
 
@@ -166,7 +164,6 @@ def handle_logout(proxy):
     account_info = {}
     save_status(proxy, None)
     logger.info(f"Logged out and cleared session info for proxy {proxy}")
-
 
 def load_proxies(proxy_file):
     try:
@@ -177,10 +174,8 @@ def load_proxies(proxy_file):
         logger.error(f"Failed to load proxies: {e}")
         raise SystemExit("Exiting due to failure in loading proxies")
 
-
 def save_status(proxy, status):
     pass  
-
 
 def save_session_info(proxy, data):
     
@@ -188,21 +183,16 @@ def save_session_info(proxy, data):
         "uid": data.get("uid"),
         "browser_id": browser_id  
     }
-    
     pass
-
 
 def load_session_info(proxy):
     return {}  
 
-
 def is_valid_proxy(proxy):
     return True  
 
-
 def remove_proxy_from_list(proxy):
     pass  
-
 
 async def main():
     all_proxies = load_proxies('proxies.txt')  
@@ -241,7 +231,6 @@ async def main():
 
         await asyncio.sleep(3)
     await asyncio.sleep(10)  
-
 
 if __name__ == '__main__':
     show_warning()
