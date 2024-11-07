@@ -10,9 +10,9 @@ def show_warning():
     confirm = input("By using this tool means you understand the risks. do it at your own risk! Press Enter to continue or Ctrl+C to cancel... ")
 
     if confirm.strip() == "":
-        print("Continuing with the program...")
+        print("Continuing...")
     else:
-        print("Exiting the program.")
+        print("Exiting...")
         exit()
 
 
@@ -96,7 +96,7 @@ async def call_api(url, data, proxy, token):
         scraper = cloudscraper.create_scraper()
 
         response = scraper.post(url, json=data, headers=headers, proxies={
-                                "http": proxy, "https": proxy}, timeout=10)
+                                "http": proxy, "https": proxy}, timeout=30)
 
         response.raise_for_status()
         return valid_resp(response.json())
@@ -244,7 +244,7 @@ async def main():
 
 if __name__ == '__main__':
     show_warning()
-    print("Alright, we here! Insert your nodepay token that you got from the tutorial.")
+    print("\nAlright, we here! Insert your nodepay token that you got from the tutorial.")
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
