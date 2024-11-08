@@ -1,6 +1,6 @@
 # Nodepay Automate with Proxies
 ### Tools and components required
-1. Nodepay Account| Register: [https://app.nodepay.ai/register]([https://app.nodepay.ai/register?ref=ZUCBuJaIoBXLE6J](https://app.nodepay.ai/register?ref=b9CCMY8a4oj1qtQ))
+1. Nodepay Account| Register: [https://app.nodepay.ai/register](https://app.nodepay.ai/register?ref=b9CCMY8a4oj1qtQ)
 2. Proxies Static Residental | [FREE 10 PREMIUM PROXIES](https://www.webshare.io)
 3. VPS (OPTIONAL) and Python3
 # Installation
