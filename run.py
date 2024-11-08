@@ -6,14 +6,6 @@ import cloudscraper
 import os
 from loguru import logger
 
-def show_warning():
-    confirm = input("By using this tool means you understand the risks. do it at your own risk! \nPress Enter to continue or Ctrl+C to cancel... ")
-
-    if confirm.strip() == "":
-        print("Continuing...")
-    else:
-        print("Exiting...")
-        exit()
 # Constants
 PING_INTERVAL = 60
 RETRIES = 60
@@ -185,45 +177,61 @@ def remove_proxy_from_list(proxy):
     pass  
 
 async def main():
-    all_proxies = load_proxies('proxies.txt')  
-    # Mengambil token dari environment variable
+    logger.info("Starting Nodepay Bot...")
+    
+    # Validasi token di awal
     token = os.getenv('token')
     if not token:
         logger.error("Token tidak ditemukan di environment variable")
         exit(1)
-
+    
+    # Validasi proxies
+    all_proxies = load_proxies('proxies.txt')
+    if not all_proxies:
+        logger.error("Tidak ada proxy yang tersedia di proxies.txt")
+        exit(1)
+    
+    logger.info(f"Loaded {len(all_proxies)} proxies")
+    
     while True:
-        active_proxies = [
-            proxy for proxy in all_proxies if is_valid_proxy(proxy)][:100]
-        tasks = {asyncio.create_task(render_profile_info(
-            proxy, token)): proxy for proxy in active_proxies}
+        try:
+            active_proxies = [proxy for proxy in all_proxies if is_valid_proxy(proxy)][:100]
+            if not active_proxies:
+                logger.error("Tidak ada proxy aktif yang tersedia")
+                exit(1)
+                
+            tasks = {asyncio.create_task(render_profile_info(
+                proxy, token)): proxy for proxy in active_proxies}
 
-        done, pending = await asyncio.wait(tasks.keys(), return_when=asyncio.FIRST_COMPLETED)
-        for task in done:
-            failed_proxy = tasks[task]
-            if task.result() is None:
-                logger.info(f"Removing and replacing failed proxy: {failed_proxy}")
-                active_proxies.remove(failed_proxy)
-                if all_proxies:
-                    new_proxy = all_proxies.pop(0)
-                    if is_valid_proxy(new_proxy):
-                        active_proxies.append(new_proxy)
-                        new_task = asyncio.create_task(
-                            render_profile_info(new_proxy, token))
-                        tasks[new_task] = new_proxy
-            tasks.pop(task)
+            done, pending = await asyncio.wait(tasks.keys(), return_when=asyncio.FIRST_COMPLETED)
+            for task in done:
+                failed_proxy = tasks[task]
+                if task.result() is None:
+                    logger.info(f"Removing and replacing failed proxy: {failed_proxy}")
+                    active_proxies.remove(failed_proxy)
+                    if all_proxies:
+                        new_proxy = all_proxies.pop(0)
+                        if is_valid_proxy(new_proxy):
+                            active_proxies.append(new_proxy)
+                            new_task = asyncio.create_task(
+                                render_profile_info(new_proxy, token))
+                            tasks[new_task] = new_proxy
+                tasks.pop(task)
 
-        for proxy in set(active_proxies) - set(tasks.values()):
-            new_task = asyncio.create_task(
-                render_profile_info(proxy, token))
-            tasks[new_task] = proxy
-        await asyncio.sleep(3)
-    await asyncio.sleep(10)  
+            for proxy in set(active_proxies) - set(tasks.values()):
+                new_task = asyncio.create_task(
+                    render_profile_info(proxy, token))
+                tasks[new_task] = proxy
+            await asyncio.sleep(3)
+        except KeyboardInterrupt:
+            logger.info("Program terminated by user")
+        except Exception as e:
+            logger.error(f"Program terminated due to error: {e}")
 
 if __name__ == '__main__':
-    show_warning()
-    print("\nAlright, we here! Insert your nodepay token that you got from the tutorial.")
     try:
         asyncio.run(main())
-    except (KeyboardInterrupt, SystemExit):
-        logger.info("Program terminated by user.")
+    except KeyboardInterrupt:
+        logger.info("Program terminated by user")
+    except Exception as e:
+        logger.error(f"Program terminated due to error: {e}")

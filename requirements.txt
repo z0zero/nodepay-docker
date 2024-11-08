@@ -3,3 +3,4 @@ aiohttp
 uuid
 cloudscraper
 loguru
+python-dotenv

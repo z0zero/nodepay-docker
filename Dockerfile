@@ -20,8 +20,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY run.py .
 COPY entrypoint.sh .
 
-# Buat file proxies.txt kosong
-RUN touch proxies.txt
+# Buat direktori untuk log
+RUN mkdir -p /app/logs
 
 # Berikan permission eksekusi untuk entrypoint.sh
 RUN chmod +x entrypoint.sh
