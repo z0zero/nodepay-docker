@@ -3,6 +3,7 @@ import aiohttp
 import time
 import uuid
 import cloudscraper
+import os
 from loguru import logger
 
 def show_warning():
@@ -185,11 +186,11 @@ def remove_proxy_from_list(proxy):
 
 async def main():
     all_proxies = load_proxies('proxies.txt')  
-    # Take token input directly from the user
-    token = input("Nodepay token: ").strip()
+    # Mengambil token dari environment variable
+    token = os.getenv('token')
     if not token:
-        print("Token cannot be empty. Exiting the program.")
-        exit()
+        logger.error("Token tidak ditemukan di environment variable")
+        exit(1)
 
     while True:
         active_proxies = [
