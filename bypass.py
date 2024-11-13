@@ -1,13 +1,14 @@
-# Test script for bypass nodepay API's | Bypassed by IM-Hanzou 
+# https://github.com/im-hanzou/nodepay-automate
 import asyncio
 import aiohttp
 import time
 import uuid
 import cloudscraper
 from loguru import logger
+from fake_useragent import UserAgent
 
 def show_warning():
-    confirm = input("THIS IS BYPASSED VERSION - BYPASSED BY IM-HANZOU (github/im-hanzou) \n\nBy using this tool means you understand the risks. do it at your own risk! \nPress Enter to continue or Ctrl+C to cancel... ")
+    confirm = input("By using this tool means you understand the risks. do it at your own risk! \nPress Enter to continue or Ctrl+C to cancel... ")
 
     if confirm.strip() == "":
         print("Continuing...")
@@ -18,15 +19,6 @@ def show_warning():
 PING_INTERVAL = 60
 RETRIES = 60
 
-# OLD Domain API
-# PING API: https://nodewars.nodepay.ai / https://nw.nodepay.ai | https://nw2.nodepay.ai | IP: 54.255.192.166
-# SESSION API: https://api.nodepay.ai | IP: 18.136.143.169, 52.77.170.182
-
-# NEW HOST DOMAIN
-#    "SESSION": "https://api.nodepay.org/api/auth/session",
-#    "PING": "https://nw.nodepay.org/api/network/ping"
-
-# Testing | Found nodepay real ip address :P | Cloudflare host bypassed!
 DOMAIN_API = {
     "SESSION": "http://18.136.143.169/api/auth/session",
     "PING": "http://52.17.10.116/api/network/ping"
@@ -86,13 +78,15 @@ async def render_profile_info(proxy, token):
             return proxy
 
 async def call_api(url, data, proxy, token):
+    user_agent = UserAgent(os=['windows', 'macos', 'linux'], browsers='chrome')
+    random_user_agent = user_agent.random
     headers = {
         "Authorization": f"Bearer {token}",
+        "User-Agent": random_user_agent,
         "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+        "Origin": "chrome-extension://lgmpfmgeabnnlemejacfljbmonaomfmm",
         "Accept": "application/json",
         "Accept-Language": "en-US,en;q=0.5",
-        "Referer": "https://app.nodepay.ai",
     }
 
     try:
@@ -123,7 +117,7 @@ async def ping(proxy, token):
     current_time = time.time()
 
     if proxy in last_ping_time and (current_time - last_ping_time[proxy]) < PING_INTERVAL:
-        logger.info(f"Skipping ping for proxy {proxy}, not enough time elapsed")
+        logger.info(f"Skipping ping for proxy { proxy}, not enough time elapsed")
         return
 
     last_ping_time[proxy] = current_time
@@ -132,7 +126,8 @@ async def ping(proxy, token):
         data = {
             "id": account_info.get("uid"),
             "browser_id": browser_id,  
-            "timestamp": int(time.time())
+            "timestamp": int(time.time()),
+            "version": "2.2.7"
         }
 
         response = await call_api(DOMAIN_API["PING"], data, proxy, token)
@@ -194,7 +189,7 @@ def remove_proxy_from_list(proxy):
     pass  
 
 async def main():
-    all_proxies = load_proxies('proxies.txt')  
+    all_proxies = load_proxies('local_proxies.txt')  
     # Take token input directly from the user
     token = input("Nodepay token: ").strip()
     if not token:
