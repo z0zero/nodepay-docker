@@ -189,7 +189,7 @@ def remove_proxy_from_list(proxy):
     pass  
 
 async def main():
-    all_proxies = load_proxies('local_proxies.txt')  
+    all_proxies = load_proxies('proxies.txt')  
     # Take token input directly from the user
     token = input("Nodepay token: ").strip()
     if not token:
