@@ -14,13 +14,13 @@ def log(level, message, color=Fore.WHITE):
     print(formatted_message)
 
 def show_warning():
-    print(Fore.LIGHTYELLOW_EX + """
+    print(Fore.LIGHTYELLOW_EX + r"""
    _  __        __    ___              ___       __                  __     
   / |/ /__  ___/ /__ / _ \___ ___ __  / _ |__ __/ /____  __ _  ___ _/ /____ 
  /    / _ \/ _  / -_) ___/ _ `/ // / / __ / // / __/ _ \/  ' \/ _ `/ __/ -_)
 /_/|_/\___/\_,_/\__/_/   \_,_/\_, / /_/ |_\_,_/\__/\___/_/_/_/\_,_/\__/\__/ 
                              /___/                                          
-          Nodepay Autofarmer by IM-Hanzou: github.com/z0zero\n""")
+          Nodepay Autofarmer by z0zero: github.com/z0zero\n""")
     try:
         confirm = input(Fore.LIGHTRED_EX + "By using this tool means you understand the risks. Do it at your own risk! \n" + 
                        Fore.LIGHTYELLOW_EX + "Press Enter to continue or Ctrl+C to cancel... ")
