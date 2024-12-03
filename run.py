@@ -1,14 +1,13 @@
-# https://github.com/z0zero/nodepay-docker
+# Not working anymore, please use runv2.py
 import asyncio
 import aiohttp
 import time
 import uuid
 import cloudscraper
 from loguru import logger
-from fake_useragent import UserAgent
 
 def show_warning():
-    confirm = input("By using this tool means you understand the risks. do it at your own risk! \nPress Enter to continue or Ctrl+C to cancel... ")
+    confirm = input("Nodepay Autofarmer by z0zero: github.com/z0zero\n\nBy using this tool means you understand the risks. do it at your own risk! \nPress Enter to continue or Ctrl+C to cancel... ")
 
     if confirm.strip() == "":
         print("Continuing...")
@@ -21,7 +20,7 @@ RETRIES = 60
 
 DOMAIN_API = {
     "SESSION": "http://api.nodepay.ai/api/auth/session",
-    "PING": "http://13.215.134.222/api/network/ping"
+    "PING": "https://nw.nodepay.org/api/network/ping"
 }
 
 CONNECTION_STATES = {
@@ -78,15 +77,13 @@ async def render_profile_info(proxy, token):
             return proxy
 
 async def call_api(url, data, proxy, token):
-    user_agent = UserAgent(os=['windows', 'macos', 'linux'], browsers='chrome')
-    random_user_agent = user_agent.random
     headers = {
         "Authorization": f"Bearer {token}",
-        "User-Agent": random_user_agent,
         "Content-Type": "application/json",
-        "Origin": "chrome-extension://lgmpfmgeabnnlemejacfljbmonaomfmm",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
         "Accept": "application/json",
         "Accept-Language": "en-US,en;q=0.5",
+        "Origin": "chrome-extension://lgmpfmgeabnnlemejacfljbmonaomfmm",
     }
 
     try:
@@ -127,7 +124,7 @@ async def ping(proxy, token):
             "id": account_info.get("uid"),
             "browser_id": browser_id,  
             "timestamp": int(time.time()),
-            "version": "2.2.7"
+            "version":"2.2.7"
         }
 
         response = await call_api(DOMAIN_API["PING"], data, proxy, token)
